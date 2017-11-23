@@ -125,6 +125,14 @@
 .atwho-view-ul * .avatar-name-wrapper,
 #commentsTabView .comment .authorRow {
 	position: relative;
+}
+
+#commentsTabView .comments .message .avatar-name-wrapper:not(.currentUser),
+#commentsTabView .comments .message .avatar-name-wrapper:not(.currentUser) .avatar,
+.atwho-view-ul .avatar-name-wrapper:not(.currentUser),
+.atwho-view-ul .avatar-name-wrapper:not(.currentUser) .avatar,
+#commentsTabView .comment .authorRow .avatar:not(.currentUser),
+#commentsTabView .comment .authorRow .author:not(.currentUser) {
 	cursor: pointer;
 }
 
