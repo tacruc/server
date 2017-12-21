@@ -423,7 +423,8 @@ class ShareByMailProvider implements IShareProvider {
 				$instanceName
 			]
 		);
-		$message->setFrom([\OCP\Util::getDefaultEmailAddress($instanceName) => $senderName]);
+
+		$message->setFrom([\OCP\Util::getDefaultEmailAddress($instanceName) => $senderName],[\OC::$server->getConfig->getSystemValue('GpgServerKey', '')]);
 
 		// The "Reply-To" is set to the sharer if an mail address is configured
 		// also the default footer contains a "Do not reply" which needs to be adjusted.
@@ -451,6 +452,7 @@ class ShareByMailProvider implements IShareProvider {
 		$filename = $share->getNode()->getName();
 		$initiator = $share->getSharedBy();
 		$shareWith = $share->getSharedWith();
+		$shareWithKey = $share->getSharedWithKey();
 
 		if ($password === '' || $this->settingsManager->sendPasswordByMail() === false) {
 			return false;
@@ -488,7 +490,7 @@ class ShareByMailProvider implements IShareProvider {
 				$instanceName
 			]
 		);
-		$message->setFrom([\OCP\Util::getDefaultEmailAddress($instanceName) => $senderName]);
+		$message->setFrom([\OCP\Util::getDefaultEmailAddress($instanceName) => $senderName],[\OC::$server->getConfig->getSystemValue('GpgServerKey', '')]);
 		if ($initiatorEmailAddress !== null) {
 			$message->setReplyTo([$initiatorEmailAddress => $initiatorDisplayName]);
 			$emailTemplate->addFooter($instanceName . ' - ' . $this->defaults->getSlogan());
@@ -496,7 +498,7 @@ class ShareByMailProvider implements IShareProvider {
 			$emailTemplate->addFooter();
 		}
 
-		$message->setTo([$shareWith]);
+		$message->setTo([$shareWith],[$shareWithKey]);
 		$message->useTemplate($emailTemplate);
 		$this->mailer->send($message);
 
@@ -519,6 +521,7 @@ class ShareByMailProvider implements IShareProvider {
 		$filename = $share->getNode()->getName();
 		$initiator = $this->userManager->get($share->getSharedBy());
 		$initiatorEMailAddress = ($initiator instanceof IUser) ? $initiator->getEMailAddress() : null;
+		$initiatorPublicKey = ($initiator instanceof IUser) ? $initiator->getDefaultPublicKey() : '';
 		$initiatorDisplayName = ($initiator instanceof IUser) ? $initiator->getDisplayName() : $share->getSharedBy();
 		$shareWith = $share->getSharedWith();
 
@@ -547,10 +550,20 @@ class ShareByMailProvider implements IShareProvider {
 		$emailTemplate->addBodyText($this->l->t('You can choose a different password at any time in the share dialog.'));
 		$emailTemplate->addFooter();
 
-		if ($initiatorEMailAddress) {
-			$message->setFrom([$initiatorEMailAddress => $initiatorDisplayName]);
+		// The "From" contains the sharers name
+		$instanceName = $this->defaults->getName();
+		$senderName = $this->l->t(
+			'%s via %s',
+			[
+				$initiatorDisplayName,
+				$instanceName
+			]
+		);
+		$message->setFrom([\OCP\Util::getDefaultEmailAddress($instanceName) => $senderName],[\OC::$server->getConfig->getSystemValue('GpgServerKey', '')]);
+		if ($initiatorEMailAddress !== null) {
+			$message->setReplyTo([$initiatorEMailAddress => $initiatorDisplayName]);
 		}
-		$message->setTo([$initiatorEMailAddress => $initiatorDisplayName]);
+		$message->setTo([$initiatorEMailAddress => $initiatorDisplayName],[$initiatorPublicKey]);
 		$message->useTemplate($emailTemplate);
 		$this->mailer->send($message);
 

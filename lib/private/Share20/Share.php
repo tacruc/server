@@ -48,6 +48,8 @@ class Share implements \OCP\Share\IShare {
 	/** @var string */
 	private $sharedWith;
 	/** @var string */
+	private $sharedWithKey;
+	/** @var string */
 	private $sharedBy;
 	/** @var string */
 	private $shareOwner;
@@ -249,6 +251,24 @@ class Share implements \OCP\Share\IShare {
 	 */
 	public function getSharedWith() {
 		return $this->sharedWith;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function setSharedWithKey($key) {
+		if (!is_string($key) && strlen($key) >= 40) {
+			throw new \InvalidArgumentException();
+		}
+		$this->sharedWithKey = $key;
+		return $this;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getSharedWithKey() {
+		return $this->sharedWithKey;
 	}
 
 	/**

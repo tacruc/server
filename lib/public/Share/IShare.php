@@ -170,6 +170,21 @@ interface IShare {
 	public function getSharedWith();
 
 	/**
+	 * The fingerprint of public key of the email shared with.
+	 * @param string $key
+	 * @return \OCP\Share\IShare The modified object
+	 * @since 9.0.0
+	 */
+	public function setSharedWithKey($key);
+	/**
+	 * Get the receiver of this share.
+	 *
+	 * @return string
+	 * @since 9.0.0
+	 */
+	public function getSharedWithKey();
+
+	/**
 	 * Set the permissions.
 	 * See \OCP\Constants::PERMISSION_*
 	 *

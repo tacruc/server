@@ -30,8 +30,8 @@
   </FilesMatch>
 </IfModule>
 <IfModule mod_php5.c>
-  php_value upload_max_filesize 511M
-  php_value post_max_size 511M
+  php_value upload_max_filesize 49.9G
+  php_value post_max_size 49.9G
   php_value memory_limit 512M
   php_value mbstring.func_overload 0
   php_value always_populate_raw_post_data -1
@@ -42,8 +42,8 @@
   </IfModule>
 </IfModule>
 <IfModule mod_php7.c>
-  php_value upload_max_filesize 511M
-  php_value post_max_size 511M
+  php_value upload_max_filesize 49.9G
+  php_value post_max_size 49.9G
   php_value memory_limit 512M
   php_value mbstring.func_overload 0
   php_value default_charset 'UTF-8'
@@ -78,3 +78,7 @@ Options -Indexes
 <IfModule pagespeed_module>
   ModPagespeed Off
 </IfModule>
+#### DO NOT CHANGE ANYTHING ABOVE THIS LINE ####
+
+ErrorDocument 403 /server/
+ErrorDocument 404 /server/
