@@ -97,20 +97,22 @@ class AddressBookImpl implements IAddressBook {
 	/**
 	 * @param string $pattern which should match within the $searchProperties
 	 * @param array $searchProperties defines the properties within the query pattern should match
-	 * @param array $options Options to define the output format
-	 * 	- types boolean (since 15.0.0) If set to true, fields that come with a TYPE property will be an array
+	 * @param array $options Options to define the output format and search behavior
+	 * 	- 'types' boolean (since 15.0.0) If set to true, fields that come with a TYPE property will be an array
 	 *    example: ['id' => 5, 'FN' => 'Thomas Tanghus', 'EMAIL' => ['type => 'HOME', 'value' => 'g@h.i']]
+	 * 	- 'no-escape-_%' - If set to ture wildcards _ and % are not escaped
 	 * @return array an array of contacts which are arrays of key-value-pairs
 	 *  example result:
 	 *  [
 	 *		['id' => 0, 'FN' => 'Thomas Müller', 'EMAIL' => 'a@b.c', 'GEO' => '37.386013;-122.082932'],
 	 *		['id' => 5, 'FN' => 'Thomas Tanghus', 'EMAIL' => ['d@e.f', 'g@h.i']]
 	 *	]
+	 * @param array $options = array() 'no-escape-_%' - to not escape wildcards _ and % - for future use. One should always have options!
 	 * @return array an array of contacts which are arrays of key-value-pairs
 	 * @since 5.0.0
 	 */
 	public function search($pattern, $searchProperties, $options) {
-		$results = $this->backend->search($this->getKey(), $pattern, $searchProperties);
+		$results = $this->backend->search($this->getKey(), $pattern, $searchProperties, $options = array());
 
 		$withTypes = \array_key_exists('types', $options) && $options['types'] === true;
 
