@@ -35,7 +35,8 @@ namespace OC {
 		 *
 		 * @param string $pattern which should match within the $searchProperties
 		 * @param array $searchProperties defines the properties within the query pattern should match
-		 * @param array $options = array() 'no-escape-_%' - to not escape wildcards _ and % - for future use. One should always have options!
+		 * @param array $options = array() to define the search behavior
+		 * 	- 'no-escape-_%' - If set to true wildcards _ and % are not escaped
 		 * @return array an array of contacts which are arrays of key-value-pairs
 		 */
 		public function search($pattern, $searchProperties = array(), $options = array()) {

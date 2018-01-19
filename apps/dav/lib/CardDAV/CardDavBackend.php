@@ -903,7 +903,8 @@ class CardDavBackend implements BackendInterface, SyncSupport {
 	 * @param int $addressBookId
 	 * @param string $pattern which should match within the $searchProperties
 	 * @param array $searchProperties defines the properties within the query pattern should match
-	 * @param array $options = array() 'no-escape-_%' - to not escape wildcards _ and % - for future use. One should always have options!
+	 * @param array $options = array() to define the search behavior
+	 * 	- 'no-escape-_%' - If set to true wildcards _ and % are not escaped
 	 * @return array an array of contacts which are arrays of key-value-pairs
 	 */
 	public function search($addressBookId, $pattern, $searchProperties, $options = array()) {
@@ -920,10 +921,10 @@ class CardDavBackend implements BackendInterface, SyncSupport {
 
 		// No need for like when the pattern is empty
 		if ('' !== $pattern) {
-			if(!in_array('no-escape-_%',$options)) {
-				$query2->andWhere($query2->expr()->ilike('cp.value', $query->createNamedParameter('%' . $this->db->escapeLikeParameter($pattern) . '%')));
-			} else {
+			if(\array_key_exists('no-escape-_%', $options) && $options['no-escape-_%'] === true) {
 				$query2->andWhere($query2->expr()->ilike('cp.value', $query->createNamedParameter($pattern)));
+			} else {
+				$query2->andWhere($query2->expr()->ilike('cp.value', $query->createNamedParameter('%' . $this->db->escapeLikeParameter($pattern) . '%')));
 			}
 		}
 

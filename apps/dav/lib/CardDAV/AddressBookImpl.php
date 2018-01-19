@@ -100,7 +100,7 @@ class AddressBookImpl implements IAddressBook {
 	 * @param array $options Options to define the output format and search behavior
 	 * 	- 'types' boolean (since 15.0.0) If set to true, fields that come with a TYPE property will be an array
 	 *    example: ['id' => 5, 'FN' => 'Thomas Tanghus', 'EMAIL' => ['type => 'HOME', 'value' => 'g@h.i']]
-	 * 	- 'no-escape-_%' - If set to ture wildcards _ and % are not escaped
+	 * 	- 'no-escape-_%' - If set to true wildcards _ and % are not escaped
 	 * @return array an array of contacts which are arrays of key-value-pairs
 	 *  example result:
 	 *  [
@@ -112,7 +112,7 @@ class AddressBookImpl implements IAddressBook {
 	 * @since 5.0.0
 	 */
 	public function search($pattern, $searchProperties, $options) {
-		$results = $this->backend->search($this->getKey(), $pattern, $searchProperties, $options = array());
+		$results = $this->backend->search($this->getKey(), $pattern, $searchProperties, $options = $options);
 
 		$withTypes = \array_key_exists('types', $options) && $options['types'] === true;
 
