@@ -51,7 +51,7 @@ interface ICache {
 	 * Set a value in the user cache
 	 * @param string $key
 	 * @param mixed $value
-	 * @param int $ttl Time To Live in seconds. Defaults to 60*60*24
+	 * @param int $ttl Minimum Time To Live in seconds. Defaults to 60*60*24
 	 * @return bool
 	 * @since 6.0.0
 	 */
